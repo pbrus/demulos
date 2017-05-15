@@ -75,16 +75,13 @@ int main(int argc, char *argv[])
     }
 
     int sizeOfFirstFile, sizeOfSecondFile, temporaryInt;
-    struct star *firstData, *secondData, *data[2];
+    struct star *firstData, *secondData;
 
     sizeOfFirstFile = amountOfLinesInFile(firstFileDescriptor, &temporaryInt);
     sizeOfSecondFile = amountOfLinesInFile(secondFileDescriptor, &temporaryInt);
 
     firstData = malloc(sizeOfFirstFile * sizeof(struct star));
     secondData = malloc(sizeOfSecondFile * sizeof(struct star));
-
-    data[0] = firstData;
-    data[1] = secondData;
 
     if (firstData == NULL || secondData == NULL)
     {
@@ -94,9 +91,25 @@ int main(int argc, char *argv[])
 
     int maxSizeOfOutputData, *tableForOutputIds;
 
-    maxSizeOfOutputData = setGreaterIntegerValue(sizeOfFirstFile, sizeOfSecondFile);
+    maxSizeOfOutputData = setSmallerIntegerValue(sizeOfFirstFile, sizeOfSecondFile);
     tableForOutputIds = malloc(maxSizeOfOutputData * sizeof(int));
 
-    readInputFile(firstFileDescriptor, firstData);
-    readInputFile(secondFileDescriptor, secondData);
+    if (tableForOutputIds == NULL)
+    {
+        cannotAllocateMemory();
+        exit(0);
+    }
+
+    int firstDataSize, secondDataSize;
+
+    firstDataSize = readInputFile(firstFileDescriptor, firstData);
+    secondDataSize = readInputFile(secondFileDescriptor, secondData);
+
+    fclose(firstFileDescriptor);
+    fclose(secondFileDescriptor);
+
+
+    free(firstData);
+    free(secondData);
+    free(tableForOutputIds);
 }
