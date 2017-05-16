@@ -11,6 +11,7 @@ struct star
 
 int setSmallerIntegerValue(int firstValue, int secondValue);
 int readInputFile(FILE *fileDescriptor, struct star *dataPointer);
+void fillOutputTableWithDataIds(const struct star *data, int outputTableIds[], int dataSize);
 int selectStars(const struct star *firstData, const struct star *secondData, int firstDataSize, int secondDataSize, double parameters[], int idStars[]);
 int starsCloseTogether(const struct star *firstStar, const struct star *secondStar, double seeing);
 int separatedMagnitudesOfStars(const struct star *firstStar, const struct star *secondStar, double minDifferenceMagnitude);

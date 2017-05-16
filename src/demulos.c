@@ -37,10 +37,20 @@ int readInputFile(FILE *fileDescriptor, struct star *dataPointer)
     return i;
 }
 
+void fillOutputTableWithDataIds(const struct star *data, int outputTableIds[], int dataSize)
+{
+    int iterator;
+
+    for (iterator = 0; iterator < dataSize; iterator++)
+    {
+        outputTableIds[iterator] = (data + iterator)->id;
+    }
+}
+
 int selectStars(const struct star *firstData, const struct star *secondData, int firstDataSize, int secondDataSize, double parameters[], int idStars[])
 {
     int firstIterator, secondIterator, returnedStarsIterator, closeStars, separatedMagnitudes;
-    double seeing = parameters[0], minDifferenceMagnitude = parameters[1];
+    double seeing = parameters[0], minDifferenceMagnitudes = parameters[1];
     double realDistance, radiusAroundStar;
 
     for (firstIterator = 0; firstIterator < firstDataSize; firstIterator++)
@@ -51,7 +61,7 @@ int selectStars(const struct star *firstData, const struct star *secondData, int
 
             if (closeStars)
             {
-                separatedMagnitudes = separatedMagnitudesOfStars(firstData + firstIterator, secondData + secondIterator, minDifferenceMagnitude);
+                separatedMagnitudes = separatedMagnitudesOfStars(firstData + firstIterator, secondData + secondIterator, minDifferenceMagnitudes);
 
                 if (separatedMagnitudes)
                 {
@@ -84,25 +94,29 @@ int starsCloseTogether(const struct star *firstStar, const struct star *secondSt
     int starsCloseTogether = 0;
     double initialSeeingMultiplier = 10.0;
 
-    if (abs(firstStar->xCoordinate - secondStar->xCoordinate) < initialSeeingMultiplier * seeing)
+    if (firstStar->id != secondStar->id)
     {
-        if (abs(firstStar->yCoordinate - secondStar->yCoordinate) < initialSeeingMultiplier * seeing)
+        if (fabs(firstStar->xCoordinate - secondStar->xCoordinate) < initialSeeingMultiplier * seeing)
         {
-            starsCloseTogether = 1;
+            if (fabs(firstStar->yCoordinate - secondStar->yCoordinate) < initialSeeingMultiplier * seeing)
+            {
+                starsCloseTogether = 1;
+            }
         }
     }
 
     return starsCloseTogether;
 }
 
-int separatedMagnitudesOfStars(const struct star *firstStar, const struct star *secondStar, double minDifferenceMagnitude)
+int separatedMagnitudesOfStars(const struct star *firstStar, const struct star *secondStar, double minDifferenceMagnitudes)
 {
-    int separatedMagnitudes;
-    double differenceMagnitude;
+    int separatedMagnitudes = 0;
+    double differenceMagnitudes;
 
-    differenceMagnitude = abs(firstStar->magnitude - secondStar->magnitude);
+    differenceMagnitudes = firstStar->magnitude - secondStar->magnitude;
+    differenceMagnitudes *= -1.0;
 
-    if (differenceMagnitude > minDifferenceMagnitude)
+    if (differenceMagnitudes > minDifferenceMagnitudes)
     {
         separatedMagnitudes = 1;
     }
@@ -124,10 +138,26 @@ double realDistanceBetweenStars(const struct star *firstStar, const struct star 
 
 double radiusOfAreaAroundStar(const struct star *singleStar, double parameters[])
 {
-    double seeing = parameters[0], differenceMagnitude = parameters[1], maxMagnitude = parameters[2];
+    double seeing = parameters[0], differenceMagnitudes = parameters[1], maxMagnitude = parameters[2];
     double radius;
 
     radius = 2.0 * seeing * ((maxMagnitude - singleStar->magnitude) / 4.0 + 0.5);
 
     return radius;
+}
+
+void writeOutputToFile(const struct star *data, int outputTableIds[], int dataSize)
+{
+    int iterator;
+    FILE *fileDescriptor;
+
+    fileDescriptor = fopen("demulos.out", "w");
+
+    for (iterator = 0; iterator < dataSize; iterator++)
+    {
+        if (outputTableIds[iterator] != -1)
+        {
+            fprintf(fileDescriptor, "%8d %10.3lf %10.3lf %8.3lf\n", (data + iterator)->id, (data + iterator)->xCoordinate, (data + iterator)->yCoordinate, (data + iterator)->magnitude);
+        }
+    }
 }
