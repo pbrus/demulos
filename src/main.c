@@ -19,11 +19,13 @@ int main(int argc, char *argv[])
             {"seeing", required_argument, 0, 's'},
             {"diff-mag", required_argument, 0, 'd'},
             {"max-mag", required_argument, 0, 'm'},
+            {"help", no_argument, 0, 'h'},
+            {"version", no_argument, 0, 'v'},
             {0, 0, 0, 0},
         };
 
         int option_index = 0;
-        argParser = getopt_long(argc, argv, "s:d:m:", long_options, &option_index);
+        argParser = getopt_long(argc, argv, "s:d:m:hv", long_options, &option_index);
 
         if (argParser == -1)
         {
@@ -44,6 +46,14 @@ int main(int argc, char *argv[])
                 optionalParameters[2] = atof(optarg);
                 break;
 
+            case 'h':
+                displayHelp();
+                exit(0);
+
+            case 'v':
+                displayVersion();
+                exit(0);
+
             case '?':
                 break;
 
@@ -60,7 +70,7 @@ int main(int argc, char *argv[])
     }
     else if ((argc - optind) != 2)
     {
-        info();
+        displayBasicInfo();
         exit(0);
     }
     else
@@ -75,15 +85,15 @@ int main(int argc, char *argv[])
     }
 
     int firstDataSize, secondDataSize, temporaryInt;
-    struct star *firstData, *secondData;
+    struct star *firstDataSet, *secondDataSet;
 
     firstDataSize = amountOfLinesInFile(firstFileDescriptor, &temporaryInt);
     secondDataSize = amountOfLinesInFile(secondFileDescriptor, &temporaryInt);
 
-    firstData = malloc(firstDataSize * sizeof(struct star));
-    secondData = malloc(secondDataSize * sizeof(struct star));
+    firstDataSet = malloc(firstDataSize * sizeof(struct star));
+    secondDataSet = malloc(secondDataSize * sizeof(struct star));
 
-    if (firstData == NULL || secondData == NULL)
+    if (firstDataSet == NULL || secondDataSet == NULL)
     {
         cannotAllocateMemory();
         exit(0);
@@ -100,16 +110,16 @@ int main(int argc, char *argv[])
         exit(0);
     }
 
-    readInputFile(firstFileDescriptor, firstData);
-    readInputFile(secondFileDescriptor, secondData);
+    readInputFile(firstFileDescriptor, firstDataSet);
+    readInputFile(secondFileDescriptor, secondDataSet);
     fclose(firstFileDescriptor);
     fclose(secondFileDescriptor);
 
-    fillOutputTableWithDataIds(firstData, tableForOutputIds, firstDataSize);
-    selectStars(firstData, secondData, firstDataSize, secondDataSize, optionalParameters, tableForOutputIds);
-    writeOutputToFile(firstData, tableForOutputIds, firstDataSize);
+    fillOutputTableWithDataIds(firstDataSet, tableForOutputIds, firstDataSize);
+    selectStars(firstDataSet, secondDataSet, firstDataSize, secondDataSize, optionalParameters, tableForOutputIds);
+    writeOutputToFile(firstDataSet, tableForOutputIds, firstDataSize);
 
-    free(firstData);
-    free(secondData);
+    free(firstDataSet);
+    free(secondDataSet);
     free(tableForOutputIds);
 }

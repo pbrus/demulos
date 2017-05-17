@@ -47,7 +47,7 @@ void fillOutputTableWithDataIds(const struct star *data, int outputTableIds[], i
     }
 }
 
-int selectStars(const struct star *firstData, const struct star *secondData, int firstDataSize, int secondDataSize, double parameters[], int idStars[])
+int selectStars(const struct star *firstDataSet, const struct star *secondDataSet, int firstDataSize, int secondDataSize, double parameters[], int idStars[])
 {
     int firstIterator, secondIterator, returnedStarsIterator, closeStars, separatedMagnitudes;
     double seeing = parameters[0], minDifferenceMagnitudes = parameters[1];
@@ -57,11 +57,11 @@ int selectStars(const struct star *firstData, const struct star *secondData, int
     {
         for (secondIterator = 0; secondIterator < secondDataSize; secondIterator++)
         {
-            closeStars = starsCloseTogether(firstData + firstIterator, secondData + secondIterator, seeing);
+            closeStars = starsCloseTogether(firstDataSet + firstIterator, secondDataSet + secondIterator, seeing);
 
             if (closeStars)
             {
-                separatedMagnitudes = separatedMagnitudesOfStars(firstData + firstIterator, secondData + secondIterator, minDifferenceMagnitudes);
+                separatedMagnitudes = separatedMagnitudesOfStars(firstDataSet + firstIterator, secondDataSet + secondIterator, minDifferenceMagnitudes);
 
                 if (separatedMagnitudes)
                 {
@@ -69,8 +69,8 @@ int selectStars(const struct star *firstData, const struct star *secondData, int
                 }
                 else
                 {
-                    realDistance = realDistanceBetweenStars(firstData + firstIterator, secondData + secondIterator);
-                    radiusAroundStar = radiusOfAreaAroundStar(firstData + firstIterator, parameters);
+                    realDistance = realDistanceBetweenStars(firstDataSet + firstIterator, secondDataSet + secondIterator);
+                    radiusAroundStar = radiusOfAreaAroundStar(firstDataSet + firstIterator, parameters);
 
                     if (realDistance >= radiusAroundStar)
                     {
@@ -149,15 +149,12 @@ double radiusOfAreaAroundStar(const struct star *singleStar, double parameters[]
 void writeOutputToFile(const struct star *data, int outputTableIds[], int dataSize)
 {
     int iterator;
-    FILE *fileDescriptor;
-
-    fileDescriptor = fopen("demulos.out", "w");
 
     for (iterator = 0; iterator < dataSize; iterator++)
     {
         if (outputTableIds[iterator] != -1)
         {
-            fprintf(fileDescriptor, "%8d %10.3lf %10.3lf %8.3lf\n", (data + iterator)->id, (data + iterator)->xCoordinate, (data + iterator)->yCoordinate, (data + iterator)->magnitude);
+            printf("%8d %10.3lf %10.3lf %8.3lf\n", (data + iterator)->id, (data + iterator)->xCoordinate, (data + iterator)->yCoordinate, (data + iterator)->magnitude);
         }
     }
 }
