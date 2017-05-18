@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
                 break;
 
             case 'h':
-                displayHelp();
+                displayHelp(optionalParameters);
                 exit(0);
 
             case 'v':

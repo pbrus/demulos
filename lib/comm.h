@@ -2,9 +2,8 @@
 #define _DEMULOS_COMM_H_
 
 void displayBasicInfo();
-void displayHelp();
+void displayHelp(double *parameters);
 void displayVersion();
-void displayDefaultArgs(double *parameters);
 void version();
 void cannotAllocateMemory();
 
