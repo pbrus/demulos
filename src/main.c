@@ -117,9 +117,11 @@ int main(int argc, char *argv[])
 
     fillOutputTableWithDataIds(firstDataSet, tableForOutputIds, firstDataSize);
     selectStars(firstDataSet, secondDataSet, firstDataSize, secondDataSize, optionalParameters, tableForOutputIds);
-    writeOutputToFile(firstDataSet, tableForOutputIds, firstDataSize);
+    printOutput(firstDataSet, tableForOutputIds, firstDataSize);
 
     free(firstDataSet);
     free(secondDataSet);
     free(tableForOutputIds);
+
+    return 0;
 }

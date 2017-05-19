@@ -38,7 +38,7 @@ int amountOfLinesInFile(FILE *fileDescriptor, int *sizeOfLongestLine)
     }
     while (singleChar != EOF);
 
-    *sizeOfLongestLine++;
+    *sizeOfLongestLine += 1;
     rewind(fileDescriptor);
 
     return amountOfLines;

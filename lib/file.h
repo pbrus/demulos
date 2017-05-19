@@ -6,10 +6,10 @@
  * Przemysław Bruś
  * https://github.com/pbrus/
  *
- * ver. 2017-05-10
+ * ver. 2017-05-19
  */
 
-FILE *getFileDescriptor();
+FILE *getFileDescriptor(char *filename, char *mode);
 int amountOfLinesInFile(FILE *fileDescriptor, int *sizeOfLongestLine);
 
 #endif

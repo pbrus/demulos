@@ -13,7 +13,7 @@ void displayBasicInfo()
     printf(" Copyright (c) Przemysław Bruś\n\n");
 }
 
-void displayHelp(double *parameters)
+void displayHelp(double parameters[])
 {
     printf("This program gets two lists with stars and returns the first list removing stars which are contaminated by stars from the second list. ");
     printf("The first list should contain preselected stars to the PSF model. The second list represents all stars found on an image. ");
@@ -35,7 +35,7 @@ void displayHelp(double *parameters)
 void displayVersion()
 {
     printf("%s\n", PROG);
-    printf(" * Version: 2017-05-18\n");
+    printf(" * Version: 2017-05-19\n");
     printf(" * Licensed under the MIT license:\n   http://opensource.org/licenses/MIT\n");
     printf(" * Copyright (c) 2017 Przemysław Bruś\n");
 }

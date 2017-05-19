@@ -12,10 +12,11 @@ struct star
 int setSmallerIntegerValue(int firstValue, int secondValue);
 int readInputFile(FILE *fileDescriptor, struct star *dataPointer);
 void fillOutputTableWithDataIds(const struct star *data, int outputTableIds[], int dataSize);
-int selectStars(const struct star *firstData, const struct star *secondData, int firstDataSize, int secondDataSize, double parameters[], int idStars[]);
+void selectStars(const struct star *firstDataSet, const struct star *secondDataSet, int firstDataSize, int secondDataSize, double parameters[], int idStars[]);
 int starsCloseTogether(const struct star *firstStar, const struct star *secondStar, double seeing);
-int separatedMagnitudesOfStars(const struct star *firstStar, const struct star *secondStar, double minDifferenceMagnitude);
+int separatedMagnitudesOfStars(const struct star *firstStar, const struct star *secondStar, double minDifferenceMagnitudes);
 double realDistanceBetweenStars(const struct star *firstStar, const struct star *secondStar);
 double radiusOfAreaAroundStar(const struct star *singleStar, double parameters[]);
+void printOutput(const struct star *data, int outputTableIds[], int dataSize);
 
 #endif

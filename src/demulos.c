@@ -47,9 +47,9 @@ void fillOutputTableWithDataIds(const struct star *data, int outputTableIds[], i
     }
 }
 
-int selectStars(const struct star *firstDataSet, const struct star *secondDataSet, int firstDataSize, int secondDataSize, double parameters[], int idStars[])
+void selectStars(const struct star *firstDataSet, const struct star *secondDataSet, int firstDataSize, int secondDataSize, double parameters[], int idStars[])
 {
-    int firstIterator, secondIterator, returnedStarsIterator, closeStars, separatedMagnitudes;
+    int firstIterator, secondIterator, closeStars, separatedMagnitudes;
     double seeing = parameters[0], minDifferenceMagnitudes = parameters[1];
     double realDistance, radiusAroundStar;
 
@@ -85,8 +85,6 @@ int selectStars(const struct star *firstDataSet, const struct star *secondDataSe
             }
         }
     }
-
-    return returnedStarsIterator;
 }
 
 int starsCloseTogether(const struct star *firstStar, const struct star *secondStar, double seeing)
@@ -138,7 +136,7 @@ double realDistanceBetweenStars(const struct star *firstStar, const struct star 
 
 double radiusOfAreaAroundStar(const struct star *singleStar, double parameters[])
 {
-    double seeing = parameters[0], differenceMagnitudes = parameters[1], maxMagnitude = parameters[2];
+    double seeing = parameters[0], maxMagnitude = parameters[2];
     double radius;
 
     radius = 2.0 * seeing * ((maxMagnitude - singleStar->magnitude) / 4.0 + 0.5);
@@ -146,7 +144,7 @@ double radiusOfAreaAroundStar(const struct star *singleStar, double parameters[]
     return radius;
 }
 
-void writeOutputToFile(const struct star *data, int outputTableIds[], int dataSize)
+void printOutput(const struct star *data, int outputTableIds[], int dataSize)
 {
     int iterator;
 
