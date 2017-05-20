@@ -152,7 +152,7 @@ void printOutput(const struct star *data, int outputTableIds[], int dataSize)
     {
         if (outputTableIds[iterator] != -1)
         {
-            printf("%8d %10.3lf %10.3lf %8.3lf\n", (data + iterator)->id, (data + iterator)->xCoordinate, (data + iterator)->yCoordinate, (data + iterator)->magnitude);
+            printf("%8d %11.4lf %11.4lf %9.4lf\n", (data + iterator)->id, (data + iterator)->xCoordinate, (data + iterator)->yCoordinate, (data + iterator)->magnitude);
         }
     }
 }

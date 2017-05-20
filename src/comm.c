@@ -42,5 +42,5 @@ void displayVersion()
 
 void cannotAllocateMemory()
 {
-    printf("Cannot allocate memory\n");
+    printf("Error from %s: Cannot allocate memory\n", PROG);
 }
