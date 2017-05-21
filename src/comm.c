@@ -35,7 +35,7 @@ void displayHelp(double parameters[])
 void displayVersion()
 {
     printf("%s\n", PROG);
-    printf(" * Version: 2017-05-19\n");
+    printf(" * Version: 2017-05-21\n");
     printf(" * Licensed under the MIT license:\n   http://opensource.org/licenses/MIT\n");
     printf(" * Copyright (c) 2017 Przemysław Bruś\n");
 }

@@ -35,7 +35,7 @@ demulos
 
 # Demo files
 list.dat
-img.fits
+image.fits
 
 # Temporary files
-demulos_*sta*
+demulos_*.stars
