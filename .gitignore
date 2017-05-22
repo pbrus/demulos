@@ -36,6 +36,7 @@ demulos
 # Demo files
 list.dat
 image.fits
+*-demulos
 
 # Temporary files
 demulos_*.stars

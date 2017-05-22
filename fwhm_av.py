@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 import sys
 import numpy as np
 
@@ -45,7 +45,7 @@ for k in range(n_it):
   fx_up_l=av_fx+(n_sd*sd_fx)
   fx_low_l=av_fx-(n_sd*sd_fx)
   fy_up_l=av_fy+(n_sd*sd_fy)
-  fy_low_l=av_fy-(n_sd*sd_fy)  
+  fy_low_l=av_fy-(n_sd*sd_fy)
   for l in  range(len(fx)):
     if fx[l]>fx_up_l or fx[l]<fx_low_l:
       id_r.append(l)
@@ -59,6 +59,5 @@ for k in range(n_it):
   sd_fx=np.std(fx_c)
   av_fy=np.average(fy_c)
   sd_fy=np.std(fy_c)
-    
-print "%5d %7.3f %7.3f %7.3f" % (len(fx_c), av_fx, av_fy, (av_fx+av_fy)/2.0)
 
+print "%5d %7.3f %7.3f %7.3f" % (len(fx_c), av_fx, av_fy, (av_fx+av_fy)/2.0)

@@ -8,7 +8,7 @@ echo " +----------------------------------------------------+"
 echo " |   This script allows to select list of stars to    |"
 echo " |              calculate the PSF model               |"
 echo " |                                                    |"
-echo " |  * Version 2017-05-21                              |"
+echo " |  * Version 2017-05-22                              |"
 echo " |  * Licensed under the MIT license:                 |"
 echo " |    http://opensource.org/licenses/MIT              |"
 echo " |  * Copyright (c) 2017 Przemysław Bruś              |"
@@ -19,23 +19,25 @@ echo " | it requires a fits image and a list of all stars   |"
 echo " | found on this frame.                               |"
 echo " +----------------------------------------------------+"
 echo " | Required additional software:                      |"
-echo " | 1. demulos (written in C)                          |"
-echo " | 2. peak from ESO eclipse library                   |"
-echo " | 3. fwhm_av.py by Zbigniew Kołaczkowski             |"
+echo " | 1. demulos by Przemysław Bruś (written in C)       |"
+echo " | 2. peak from the ESO eclipse library               |"
+echo " | 3. dfits from the ESO eclipse library              |"
+echo " | 4. fwhm_av.py by Zbigniew Kołaczkowski             |"
 echo " +----------------------------------------------------+"
 echo " | Before use set parameters in this script inside    |"
 echo " | the == SET PARAMETERS == section                   |"
 echo " +----------------------------------------------------+"
 echo " |                      Usage:                        |"
-echo " | demulos.bash --list listName --image imageName     |"
+echo " | demulos.bash --list <listName> --image <imageName> |"
+echo " |              --diff-mag [floatNumber]              |"
 echo " +----------------------------------------------------+"
 echo ""
 exit 0
 fi
 
 # ===================== SET PARAMETERS =====================
-# set variables describing the structure of the list file
-# with all stars and size of the header
+# Set variables describing the structure of the list file
+# with all stars and size of the header.
 
 headerSize=0
 columnWithId=1
@@ -44,18 +46,19 @@ columnWithYCoordinate=3
 columnWithMagnitude=4
 columnWithMagnitudeError=5
 
-# set the number of stars to create the initial list of stars
-# to a PSF model
+# Set the number of stars to create the initial list of stars
+# to a PSF model.
 
 numberOfStarsToInitialList=200
 
-# set a one parameter to demulos. The rest of arguments is
-# calculated based on the list with stars and image
+# Set a one parameter to demulos. The rest of arguments is
+# calculated based on the list with stars and image. It can
+# be also set from the command line as --diff-mag parameter
 
 differenceOfMagnitudes=3.0
 
-# set a maximum error of brightness. It's needed
-# to determine the faintest star on the image
+# Set a maximum error of brightness. It is needed
+# to determine the faintest star on the image.
 
 maxErrorOfReliableMagnitude=0.2
 
@@ -77,6 +80,9 @@ do
     elif [ "$arg" == "--image" ]
     then
         imageFile=${@:$((iterator + 1)):1}
+    elif [ "$arg" == "--diff-mag" ]
+    then
+        differenceOfMagnitudes=${@:$((iterator + 1)):1}
     fi
 done
 
@@ -107,6 +113,11 @@ then
     exit
 else
     seeingValue=`fwhm_av.py demulos_fwhm.stars | awk '{print $4}'`
+    imageMargin=`awk 'BEGIN {print 3 * '$seeingValue'}'`
+    xSizeOfImage=`dfits $imageFile | grep NAXIS1 | awk '{print $3}'`
+    ySizeOfImage=`dfits $imageFile | grep NAXIS2 | awk '{print $3}'`
+    maxX=`awk 'BEGIN {print '$xSizeOfImage' - '$imageMargin'}'`
+    maxY=`awk 'BEGIN {print '$ySizeOfImage' - '$imageMargin'}'`
 fi
 
 awk \
@@ -124,7 +135,10 @@ awk \
 }' $listFile > demulos_all.stars
 
 LANG=C sort -n -k 4 demulos_all.stars | awk \
-'{if ($2 > 0.0 && $3 > 0.0) print $0}' | \
+-v m=$imageMargin \
+-v mX=$maxX \
+-v mY=$maxY \
+'{if ($2 > m && $2 < mX && $3 > m && $3 < mY) print $0}' | \
 head -n $numberOfStarsToInitialList > demulos_psf.stars
 
 limitOfMagnitude=`awk \
@@ -138,6 +152,7 @@ limitOfMagnitude=`awk \
 demulos demulos_psf.stars demulos_all.stars --seeing $seeingValue --diff-mag $differenceOfMagnitudes --max-mag $limitOfMagnitude > demulos_ouput.stars
 
 awk 'BEGIN {while (getline < "demulos_id.stars") num[$1] = $2} {print num[$1]}' demulos_ouput.stars > demulos_psf_id.stars
+outputFile=${listFile}-demulos
 
 awk \
 -v hs=$headerSize \
@@ -153,6 +168,14 @@ NR > hs \
     {
         print $0
     }
-}' $listFile > ${listFile}-demulos
+}' $listFile > $outputFile
 
+amountOfFoundStars=`wc -l demulos_psf_id.stars | awk '{print $1}'`
 rm demulos_*.stars
+
+if [ $amountOfFoundStars -eq 1 ]
+then
+    echo "File $outputFile has been successfully created, $amountOfFoundStars star has been found!"
+else
+    echo "File $outputFile has been successfully created, $amountOfFoundStars stars have been found!"
+fi
