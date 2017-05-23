@@ -8,7 +8,7 @@ echo " +----------------------------------------------------+"
 echo " |   This script allows to select list of stars to    |"
 echo " |              calculate the PSF model               |"
 echo " |                                                    |"
-echo " |  * Version 2017-05-22                              |"
+echo " |  * Version 2017-05-23                              |"
 echo " |  * Licensed under the MIT license:                 |"
 echo " |    http://opensource.org/licenses/MIT              |"
 echo " |  * Copyright (c) 2017 Przemysław Bruś              |"
@@ -28,8 +28,8 @@ echo " | Before use set parameters in this script inside    |"
 echo " | the == SET PARAMETERS == section                   |"
 echo " +----------------------------------------------------+"
 echo " |                      Usage:                        |"
-echo " | demulos.bash --list <listName> --image <imageName> |"
-echo " |              --diff-mag [floatNumber]              |"
+echo " |./demulos.bash --list <listName> --image <imageName>|"
+echo " |               --diff-mag [floatNumber]             |"
 echo " +----------------------------------------------------+"
 echo ""
 exit 0
@@ -53,7 +53,7 @@ numberOfStarsToInitialList=200
 
 # Set a one parameter to demulos. The rest of arguments is
 # calculated based on the list with stars and image. It can
-# be also set from the command line as --diff-mag parameter
+# be also set from the command line as --diff-mag parameter.
 
 differenceOfMagnitudes=3.0
 
