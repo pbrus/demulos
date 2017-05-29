@@ -25,7 +25,7 @@ $ ./demulos.bash --list stars.dat --image image.fits
 ```
 These two arguments are mandatory. There is also one additional parameter which can be either set from the command line or in the *SET PARAMETERS* section:
 ```bash
-$./demulos.bash --image image.fits --diff-mag 2.5 --list stars.dat
+$ ./demulos.bash --image image.fits --diff-mag 2.5 --list stars.dat
 ```
 Note that the order of the arguments doesn't matter. After all the program generates the output file called `stars.dat-demulos` which contains isolated stars. This list can be used to determine the PSF model, particularly in dense stellar fields.
 
