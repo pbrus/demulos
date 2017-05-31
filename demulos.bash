@@ -8,7 +8,7 @@ echo " +----------------------------------------------------+"
 echo " |   This script allows to select list of stars to    |"
 echo " |              calculate the PSF model               |"
 echo " |                                                    |"
-echo " |  * Version 2017-05-23                              |"
+echo " |  * Version 2017-05-31                              |"
 echo " |  * Licensed under the MIT license:                 |"
 echo " |    http://opensource.org/licenses/MIT              |"
 echo " |  * Copyright (c) 2017 Przemysław Bruś              |"
@@ -64,6 +64,13 @@ maxErrorOfReliableMagnitude=0.2
 
 # To see more info about two last parameters please run the
 # program with --help option: demulos --help
+
+# Set minimum or maximum values of magnitude that define
+# the range of brightness for stars from the final list.
+
+minMagnitude=10.0   # minMagnitude=none to disable lower limit
+maxMagnitude=15.0   # manMagnitude=none to disable upper limit
+
 # ==========================================================
 
 
@@ -154,23 +161,83 @@ demulos demulos_psf.stars demulos_all.stars --seeing $seeingValue --diff-mag $di
 awk 'BEGIN {while (getline < "demulos_id.stars") num[$1] = $2} {print num[$1]}' demulos_ouput.stars > demulos_psf_id.stars
 outputFile=${listFile}-demulos
 
-awk \
--v hs=$headerSize \
--v id=$columnWithId \
-'BEGIN {while (getline < "demulos_psf_id.stars") num[$1] = $1} \
-NR <= hs \
-{
-    print $0
-}
-NR > hs \
-{
-    if ($id == num[$id])
+if [ $minMagnitude == "none" ] && [ $maxMagnitude == "none" ]
+then
+    awk \
+    -v hs=$headerSize \
+    -v id=$columnWithId \
+    'BEGIN {while (getline < "demulos_psf_id.stars") num[$1] = $1} \
+    NR <= hs \
     {
         print $0
     }
-}' $listFile > $outputFile
+    NR > hs \
+    {
+        if ($id == num[$id])
+        {
+            print $0
+        }
+    }' $listFile > $outputFile
+elif [ $minMagnitude == "none" ]
+then
+    awk \
+    -v hs=$headerSize \
+    -v id=$columnWithId \
+    -v mag=$columnWithMagnitude \
+    -v maxMag=$maxMagnitude \
+    'BEGIN {while (getline < "demulos_psf_id.stars") num[$1] = $1} \
+    NR <= hs \
+    {
+        print $0
+    }
+    NR > hs \
+    {
+        if ($id == num[$id] && $mag <= maxMag)
+        {
+            print $0
+        }
+    }' $listFile > $outputFile
+elif [ $maxMagnitude == "none" ]
+then
+    awk \
+    -v hs=$headerSize \
+    -v id=$columnWithId \
+    -v mag=$columnWithMagnitude \
+    -v minMag=$minMagnitude \
+    'BEGIN {while (getline < "demulos_psf_id.stars") num[$1] = $1} \
+    NR <= hs \
+    {
+        print $0
+    }
+    NR > hs \
+    {
+        if ($id == num[$id] && $mag >= minMag)
+        {
+            print $0
+        }
+    }' $listFile > $outputFile
+else
+    awk \
+    -v hs=$headerSize \
+    -v id=$columnWithId \
+    -v mag=$columnWithMagnitude \
+    -v minMag=$minMagnitude \
+    -v maxMag=$maxMagnitude \
+    'BEGIN {while (getline < "demulos_psf_id.stars") num[$1] = $1} \
+    NR <= hs \
+    {
+        print $0
+    }
+    NR > hs \
+    {
+        if ($id == num[$id] && $mag >= minMag && $mag <= maxMag)
+        {
+            print $0
+        }
+    }' $listFile > $outputFile
+fi
 
-amountOfFoundStars=`wc -l demulos_psf_id.stars | awk '{print $1}'`
+amountOfFoundStars=`wc -l $outputFile | awk '{print $1 - '$headerSize'}'`
 rm demulos_*.stars
 
 if [ $amountOfFoundStars -eq 1 ]
