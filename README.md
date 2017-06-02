@@ -15,7 +15,7 @@ and set the destination directory for `demulos` and `fwhm_av.py` programs. Due t
  * you may have a lot of directories containing data from different observatories
  * some parameters can be set inside the `demulos.bash` script
 
-`demulos.bash` should be always located at the working directory (just make copies of the script to spread it into directories). Moreover you should have installed `peak` and `dfits` programs from [the ESO eclipse library](https://www.eso.org/sci/software/eclipse/). I recommend to download the latest version: ftp://ftp.eso.org/pub/eclipse/eclipse-5.0.0/eclipse-main-5.0.0.tar.gz and compilte it according to *INSTALL* file.
+`demulos.bash` should be always located at the working directory (just make copies of the script to spread it into directories). Moreover you should have installed `peak` and `dfits` programs from [the ESO eclipse library](https://www.eso.org/sci/software/eclipse/). I recommend to download the latest version: ftp://ftp.eso.org/pub/eclipse/eclipse-5.0.0/eclipse-main-5.0.0.tar.gz and compilte it according to the *INSTALL* file.
 
 ## Usage
 

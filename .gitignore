@@ -34,7 +34,7 @@ demulos
 *.su
 
 # Demo files
-list.dat
+stars.dat
 image.fits
 *-demulos
 
