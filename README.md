@@ -6,7 +6,13 @@ Program allows to select isolated stars in crowded fields. These stars can be us
 
 ## Installation
 
-Download the package wherever you want. In the next step call the installation script using *bash*:
+Download the package wherever you want. Additionally you need to have installed the following software:
+
+ * *gcc*
+ * *make*
+ * *some Unix commands*
+
+Call the installation script using *bash*:
 ```bash
 $ bash install
 ```
