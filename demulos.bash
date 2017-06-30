@@ -8,7 +8,7 @@ echo " +----------------------------------------------------+"
 echo " |   This script allows to select list of stars to    |"
 echo " |              calculate the PSF model               |"
 echo " |                                                    |"
-echo " |  * Version 2017-05-31                              |"
+echo " |  * Version 2017-06-30                              |"
 echo " |  * Licensed under the MIT license:                 |"
 echo " |    http://opensource.org/licenses/MIT              |"
 echo " |  * Copyright (c) 2017 Przemysław Bruś              |"
@@ -64,6 +64,10 @@ maxErrorOfReliableMagnitude=0.2
 
 # To see more info about two last parameters please run the
 # program with --help option: demulos --help
+
+# Set a maximum error of brigthness for stars from the output list.
+
+maxErrorOfMagnitude=0.05 # maxErrorOfMagnitude=none to disable this value
 
 # Set minimum or maximum values of magnitude that define
 # the range of brightness for stars from the final list.
@@ -177,7 +181,7 @@ then
         {
             print $0
         }
-    }' $listFile > $outputFile
+    }' $listFile > demulos_psf_sel.stars
 elif [ $minMagnitude == "none" ]
 then
     awk \
@@ -196,7 +200,7 @@ then
         {
             print $0
         }
-    }' $listFile > $outputFile
+    }' $listFile > demulos_psf_sel.stars
 elif [ $maxMagnitude == "none" ]
 then
     awk \
@@ -215,7 +219,7 @@ then
         {
             print $0
         }
-    }' $listFile > $outputFile
+    }' $listFile > demulos_psf_sel.stars
 else
     awk \
     -v hs=$headerSize \
@@ -234,7 +238,17 @@ else
         {
             print $0
         }
-    }' $listFile > $outputFile
+    }' $listFile > demulos_psf_sel.stars
+fi
+
+if [ $maxErrorOfMagnitude == "none" ]
+then
+    cp demulos_psf_sel.stars $outputFile
+else
+    awk \
+    -v err=$columnWithMagnitudeError \
+    -v merr=$maxErrorOfMagnitude \
+    '{if ($err <= merr) print $0}' demulos_psf_sel.stars > $outputFile
 fi
 
 amountOfFoundStars=`wc -l $outputFile | awk '{print $1 - '$headerSize'}'`

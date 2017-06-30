@@ -26,7 +26,7 @@ void displayHelp(double parameters[])
     printf(" --diff-mag N\tThe difference of magnitudes between stars from the first and second lists\n");
     printf("             \tIf a real difference is smaller than this value it means that a star from\n");
     printf("             \tthe first list is contaminated by a star from the second list and will be\n");
-    printf("             \tremoved - if stars are sufficient close (default: %.2lf)\n", parameters[1]);
+    printf("             \tremoved - if the stars are sufficient close (default: %.2lf)\n", parameters[1]);
     printf(" --max-mag  N\tThe value of the faintest (reliable) star on the image. It's used to calculate\n");
     printf("             \tthe modified distance between two stars (default: %.2lf)\n\n", parameters[2]);
     printf("An example of usage:\n\n demulos psf.lst stars.lst --max-mag 20.5 --seeing 6.70\n\n");
@@ -35,7 +35,7 @@ void displayHelp(double parameters[])
 void displayVersion()
 {
     printf("%s\n", PROG);
-    printf(" * Version: 2017-05-21\n");
+    printf(" * Version: 2017-06-30\n");
     printf(" * Licensed under the MIT license:\n   http://opensource.org/licenses/MIT\n");
     printf(" * Copyright (c) 2017 Przemysław Bruś\n");
 }
