@@ -8,7 +8,7 @@ echo " +----------------------------------------------------+"
 echo " |   This script allows to select list of stars to    |"
 echo " |              calculate the PSF model               |"
 echo " |                                                    |"
-echo " |  * Version 2017-06-30                              |"
+echo " |  * Version 2017-08-13                              |"
 echo " |  * Licensed under the MIT license:                 |"
 echo " |    http://opensource.org/licenses/MIT              |"
 echo " |  * Copyright (c) 2017 Przemysław Bruś              |"
@@ -246,9 +246,10 @@ then
     cp demulos_psf_sel.stars $outputFile
 else
     awk \
+    -v hs=$headerSize \
     -v err=$columnWithMagnitudeError \
     -v merr=$maxErrorOfMagnitude \
-    '{if ($err <= merr) print $0}' demulos_psf_sel.stars > $outputFile
+    'NR <= hs {print $0} NR > hs {if ($err <= merr) print $0}' demulos_psf_sel.stars > $outputFile
 fi
 
 amountOfFoundStars=`wc -l $outputFile | awk '{print $1 - '$headerSize'}'`
