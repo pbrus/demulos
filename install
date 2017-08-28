@@ -3,7 +3,6 @@
 # install file for demulos
 # https://github.com/pbrus/demulos
 
-INSTALL_FILE=install
 DEFAULT_INSTALL_PATH=~/bin/
 
 echo "Set the install path and press Enter (default ${DEFAULT_INSTALL_PATH}):"
@@ -16,6 +15,6 @@ fi
 make demulos
 make clean
 chmod 755 demulos.bash fwhm_av.py
-cp fwhm_av.py demulos ${DEFAULT_INSTALL_PATH}
+cp fwhm_av.py demulos ${installPath}
 
 echo -e "\n\tDemulos has been successfully installed!\n"
