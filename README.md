@@ -10,7 +10,7 @@ Download the package wherever you want. Additionally you need to have installed 
 
  * *gcc*
  * *make*
- * *some Unix commands*
+ * *some coreutils tools*
 
 Call the installation script using *bash*:
 ```bash
