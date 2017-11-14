@@ -8,7 +8,7 @@ echo " +----------------------------------------------------+"
 echo " |   This script allows to select list of stars to    |"
 echo " |              calculate the PSF model               |"
 echo " |                                                    |"
-echo " |  * Version 2017-08-13                              |"
+echo " |  * Version 2017-11-14                              |"
 echo " |  * Licensed under the MIT license:                 |"
 echo " |    http://opensource.org/licenses/MIT              |"
 echo " |  * Copyright (c) 2017 Przemysław Bruś              |"
@@ -75,6 +75,12 @@ maxErrorOfMagnitude=0.05 # maxErrorOfMagnitude=none to disable this value
 minMagnitude=10.0   # minMagnitude=none to disable lower limit
 maxMagnitude=15.0   # manMagnitude=none to disable upper limit
 
+# Minimum and maximum value of flux on the image. These values define
+# the range whence stars are taken to calculate seeing.
+
+minFluxOnImage=3500.0
+maxFluxOnImage=7500.0
+
 # ==========================================================
 
 
@@ -123,7 +129,7 @@ then
     rm demulos_fwhm.stars
     exit
 else
-    seeingValue=`fwhm_av.py demulos_fwhm.stars | awk '{print $4}'`
+    seeingValue=`fwhm_av.py demulos_fwhm.stars $minFluxOnImage $maxFluxOnImage | awk '{print $4}'`
     imageMargin=`awk 'BEGIN {print 3 * '$seeingValue'}'`
     xSizeOfImage=`dfits $imageFile | grep NAXIS1 | awk '{print $3}'`
     ySizeOfImage=`dfits $imageFile | grep NAXIS2 | awk '{print $3}'`
